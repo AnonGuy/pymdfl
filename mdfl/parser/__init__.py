@@ -10,7 +10,7 @@ from cookiecutter.main import cookiecutter
 from lark import Lark, lark
 
 
-__all__ = ['parser']
+__all__ = ["parser"]
 
 
 GRAMMAR = r"""
@@ -48,8 +48,13 @@ def enter_tree(tree: lark.Tree) -> Tuple[str, list]:
     return name, subtree.children
 
 
-def create_pack(tree: lark.Tree, pack_name: str) -> None:
+def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
     """Create a data pack, given an AST."""
+    destination = Path(path) if path else Path(f"{pack_name}.zip")
+    destination = destination.expanduser().absolute()
+    if destination.is_dir():
+        destination = destination / f"{pack_name}.zip"
+
     namespaces: List[dict] = []
     pack = {
         "name": pack_name,
@@ -105,7 +110,7 @@ def create_pack(tree: lark.Tree, pack_name: str) -> None:
             )
             shutil.rmtree(f"{name}.function")
 
-    with ZipFile(f"{pack_name}.zip", "w") as zipfile:
+    with ZipFile(str(destination), "w") as zipfile:
         for file in root.rglob("*"):
             zipfile.write(file, file.relative_to(root))
 

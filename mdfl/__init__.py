@@ -1,13 +1,18 @@
 """
-Command-line tool for parsing MDFL.
+Command-line tool for parsing MDFL and generating Data Packs.
 
 Usage:
-    mdfl <script>
+    mdfl <script> [--output=<path>]
     mdfl -h | --help
-    mdfl --version
+    mdfl -V | --version
+
+Options:
+    -h --help        Show this screen.
+    -V --version     Show version.
+    --output=<path>  Output path for the datapack.
 """
 
-__version__ = '0.1.1'
+__version__ = "0.1.3"
 
 from pathlib import Path
 
@@ -18,9 +23,13 @@ from mdfl.parser import create_pack, parser
 
 def main() -> None:
     """Entry point for the command line interface."""
-    arguments = docopt(__doc__, version=f'mdfl {__version__}')
-    script = Path(arguments.get('<script>'))
+    arguments = docopt(__doc__, version=f"mdfl {__version__}")
+    script = Path(arguments.get("<script>"))
     with script.open() as file:
         contents = file.read()
     syntax_tree = parser.parse(contents)
-    create_pack(syntax_tree, pack_name=script.stem)
+    create_pack(
+        syntax_tree,
+        pack_name=script.stem,
+        path=arguments.get("--output")
+    )
