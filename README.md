@@ -5,12 +5,17 @@ A command-line application to generate data packs based on [CRISPYRice](https://
 ## Usage
 `mdfl --help` will output usage information:
 ```
-Command-line tool for parsing MDFL.
+Command-line tool for parsing MDFL and generating Data Packs.
 
 Usage:
-    mdfl <script>
+    mdfl <script> [--output=<path>]
     mdfl -h | --help
-    mdfl --versio
+    mdfl -V | --version
+
+Options:
+    -h --help        Show this screen.
+    -V --version     Show version.
+    --output=<path>  Output path for the datapack.
 ```
 
 The `<script>` argument specifies a file that conforms to the MDFL spec. For example, given a file `gems.mdfl`:
