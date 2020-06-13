@@ -13,7 +13,7 @@ from pathlib import Path
 
 from docopt import docopt
 
-from mdfl.parser import parser, create_pack
+from mdfl.parser import create_pack, parser
 
 
 def main() -> None:

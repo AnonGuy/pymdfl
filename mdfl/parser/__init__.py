@@ -80,7 +80,7 @@ def create_pack(tree: lark.Tree, pack_name: str) -> None:
                     }
                 })
 
-    templates = next(Path().glob("**/templates"))
+    templates = Path(__file__).parent.parent / "templates"
     cookiecutter(
         str(templates / "pack"),
         extra_context=pack,
