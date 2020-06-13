@@ -1,6 +1,10 @@
 # PyMDFL
 A command-line application to generate data packs based on [CRISPYRice](https://github.com/CRISPYricePC/MDFL-Spec/blob/master/spec.md)'s MDFL specification.
 
+## Installation
+Install with pip: `python -m pip install mdfl`
+
+If pip doesn't add the package to PATH correctly, you can start the program with `python -m mdfl`.
 
 ## Usage
 `mdfl --help` will output usage information:
