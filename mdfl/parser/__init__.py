@@ -1,18 +1,22 @@
 """Parsing logic and grammar for MDFL."""
 
+import re
 import shutil
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 from zipfile import ZipFile
 
 from cookiecutter.main import cookiecutter
 
 from lark import Lark, lark
 
+from mdfl.parser.exceptions import InvalidNBTReferenceException
+from mdfl.parser.utils import enter_tree, get_nbt_items
 
-__all__ = ["parser"]
 
+__all__ = ["parser", "create_pack"]
 
+NBT_REFERENCE = re.compile(r'\$"(.+)"')
 GRAMMAR = r"""
     start: namespace+
 
@@ -42,14 +46,10 @@ GRAMMAR = r"""
 parser = Lark(GRAMMAR)
 
 
-def enter_tree(tree: lark.Tree) -> Tuple[str, list]:
-    """Return the name token and children of a tree."""
-    name, subtree = tree.children
-    return name, subtree.children
-
-
 def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
     """Create a data pack, given an AST."""
+    nbt_items = get_nbt_items()
+
     destination = Path(path) if path else Path(f"{pack_name}.zip")
     destination = destination.expanduser().absolute()
     if destination.is_dir():
@@ -73,11 +73,21 @@ def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
         namespaces.append(namespace)
         for definition in definitions:
             if definition.data == 'function':
+                commands: List[str] = []
                 name, instructions = enter_tree(definition)
-                commands = [
-                    str(instruction.children[0])
-                    for instruction in instructions
-                ]
+                for instruction in instructions:
+                    command = str(instruction.children[0])
+                    match = NBT_REFERENCE.search(command)
+                    if match:
+                        reference = match.group(1)
+                        item = nbt_items.get(reference)
+                        if item is None:
+                            raise InvalidNBTReferenceException(
+                                f"{reference} is not an existing NBT item."
+                            )
+                        command = NBT_REFERENCE.sub(item, command)
+                        print(command)
+                    commands.append(command)
                 functions.append({
                     "name": str(name),
                     "instructions": {

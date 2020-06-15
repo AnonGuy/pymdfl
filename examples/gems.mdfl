@@ -1,17 +1,17 @@
 namespace diamonds {
-  // Namespace for obtaining diamonds.
+  // Namespace for obtaining powerful diamonds.
 
   fun get {
     // Give the caller a diamond.
-    give @s minecraft:diamond;
+    give @s $"diamond_of_power";
   }
 }
 
 namespace emeralds {
-  // Namespace for obtaining emeralds.
+  // Namespace for obtaining powerful emeralds.
 
   fun get {
     // Give the caller an emerald.
-    give @s minecraft:emerald;
+    give @s $"emerald_of_power";
   }
 }
