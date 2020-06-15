@@ -9,10 +9,11 @@ If pip doesn't add the package to PATH correctly, you can start the program with
 ## Usage
 `mdfl --help` will output usage information:
 ```
-Command-line tool for parsing MDFL and generating Data Packs.
+PyMDFL: A command-line tool for parsing MDFL and generating Data Packs.
 
 Usage:
     mdfl <script> [--output=<path>]
+    mdfl <script> [--tree]
     mdfl -h | --help
     mdfl -V | --version
 
@@ -20,6 +21,7 @@ Options:
     -h --help        Show this screen.
     -V --version     Show version.
     --output=<path>  Output path for the datapack.
+    --tree           Print a syntax tree without compiling.
 ```
 
 The `<script>` argument specifies a file that conforms to the MDFL spec. For example, given a file `gems.mdfl`:
