@@ -1,3 +1,5 @@
+description "All your gems are belong to @s"
+
 namespace diamonds {
   // Namespace for obtaining powerful diamonds.
 

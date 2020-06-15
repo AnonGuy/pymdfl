@@ -18,8 +18,9 @@ __all__ = ["parser", "create_pack"]
 
 NBT_REFERENCE = re.compile(r'\$"(.+)"')
 GRAMMAR = r"""
-    start: namespace+
+    start: (namespace | description)+
 
+    description: "description" STRING
     namespace: "namespace" NAME "{" definition+ "}"
 
     definition: objective
@@ -29,13 +30,14 @@ GRAMMAR = r"""
     function: "fun" NAME "{" instruction+ "}"
 
     instruction: objective
-               | COMMENT
                | command
+               | COMMENT
 
-    command: COMMAND ";"
+    command: TEXT ";"
 
+    TEXT: /[^\/\n};]+/
+    STRING: /"[^\n]+"/
     COMMENT: /\/\/[^\n]+/
-    COMMAND: /[^\/\n};]+/
     WHITESPACE: (" " | "\n")+
 
     %ignore COMMENT
@@ -59,11 +61,15 @@ def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
     pack = {
         "name": pack_name,
         "namespaces": namespaces,
-        "description": input(f"Description of {pack_name}: ")
     }
     root = Path(pack_name)
 
     for subtree in tree.children:
+        if subtree.data == "description":
+            description = subtree.children[0].strip('"')
+            pack["description"] = description
+            continue
+
         functions: List[dict] = []
         name, definitions = enter_tree(subtree)
         namespace = {
@@ -71,6 +77,7 @@ def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
             "functions": functions
         }
         namespaces.append(namespace)
+
         for definition in definitions:
             if definition.data == 'function':
                 commands: List[str] = []
@@ -93,6 +100,9 @@ def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
                         "commands": list(commands)
                     }
                 })
+
+    if "description" not in pack:
+        pack["description"] = input(f"Description of {pack_name}: ")
 
     templates = Path(__file__).parent.parent / "templates"
     cookiecutter(
