@@ -12,7 +12,7 @@ Options:
     --output=<path>  Output path for the datapack.
 """
 
-__version__ = "0.2"
+__version__ = "0.2.1"
 
 from pathlib import Path
 

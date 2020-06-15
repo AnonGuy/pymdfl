@@ -86,7 +86,6 @@ def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
                                 f"{reference} is not an existing NBT item."
                             )
                         command = NBT_REFERENCE.sub(item, command)
-                        print(command)
                     commands.append(command)
                 functions.append({
                     "name": str(name),

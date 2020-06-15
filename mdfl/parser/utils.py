@@ -75,5 +75,4 @@ def get_nbt_items() -> Dict[str, str]:
                     item.name: str(item)
                     for item in map(NBTItem, data)
                 })
-    print(items)
     return items

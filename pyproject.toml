@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mdfl"
-version = "0.2"
+version = "0.2.1"
 description = "A prototype command-line tool for creating datapacks."
 authors = ["Jeremiah Boby <mail@jeremiahboby.me>"]
 license = "MIT"
