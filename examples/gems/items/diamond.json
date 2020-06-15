@@ -1,0 +1,10 @@
+{
+  "name": "diamond_of_power",
+  "item": "minecraft:diamond",
+  "count": 1,
+  "nbt": {
+    "display": {
+      "Name": "Diamond of Power"
+    }
+  }
+}

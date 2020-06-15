@@ -3,7 +3,7 @@
 import re
 import shutil
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from zipfile import ZipFile
 
 from cookiecutter.main import cookiecutter
@@ -48,11 +48,11 @@ GRAMMAR = r"""
 parser = Lark(GRAMMAR)
 
 
-def create_pack(tree: lark.Tree, pack_name: str, path: str = None) -> None:
+def create_pack(tree: lark.Tree, pack_name: str, source: Path, target: Optional[Path]) -> None:
     """Create a data pack, given an AST."""
-    nbt_items = get_nbt_items()
+    nbt_items = get_nbt_items(source)
 
-    destination = Path(path) if path else Path(f"{pack_name}.zip")
+    destination = Path(target) if target else Path(f"{pack_name}.zip")
     destination = destination.expanduser().absolute()
     if destination.is_dir():
         destination = destination / f"{pack_name}.zip"

@@ -11,6 +11,9 @@ import lark
 from mdfl.parser.exceptions import MissingNBTFieldException
 
 
+__all__ = ["enter_tree", "get_nbt_items"]
+
+
 @dataclass
 class NBTItem:
     """Class representing an NBT item."""
@@ -53,15 +56,11 @@ def enter_tree(tree: lark.Tree) -> Tuple[str, list]:
     return name, subtree.children
 
 
-def get_nbt_items() -> Dict[str, str]:
+def get_nbt_items(root: Path) -> Dict[str, str]:
     """Look for nearby .json files, and return a list of global NBT items."""
     items: Dict[str, str] = {}
-    current_directory = Path()
+    paths = [*root.glob('*.json'), *root.glob('*/*.json')]
 
-    paths = [
-        *current_directory.glob('*.json'),
-        *current_directory.glob('*/*.json')
-    ]
     for path in paths:
         # Skip the file if it doesn't contain a valid NBT item
         with suppress(MissingNBTFieldException):
