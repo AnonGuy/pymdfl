@@ -1,4 +1,4 @@
-# PyMDFL
+# PyMDFL [![Package](https://badge.fury.io/py/mdfl.svg)](https://badge.fury.io/py/mdfl)
 A command-line application to generate data packs based on [CRISPYrice](https://github.com/CRISPYricePC/MDFL-Spec/blob/master/spec.md)'s MDFL specification.
 
 ## Installation
