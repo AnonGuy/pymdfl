@@ -18,7 +18,7 @@ Options:
     --tree           Print a syntax tree without compiling.
 """
 
-__version__ = "0.2.3"
+__version__ = "0.3"
 
 from pathlib import Path
 

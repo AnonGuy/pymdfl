@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 
 import lark
 
-from mdfl.parser.exceptions import MissingNBTFieldException
+from mdfl.parser.exceptions import MissingNBTFieldError
 
 
 __all__ = ["enter_tree", "get_nbt_items"]
@@ -32,7 +32,7 @@ class NBTItem:
             if key in json_data:
                 setattr(self, key, json_data[key])
             else:
-                raise MissingNBTFieldException(f"NBT item missing key: {key}")
+                raise MissingNBTFieldError(f"NBT item missing field: {key}")
 
         if "nbt" in json_data:
             self.nbt_data = json_data["nbt"]
@@ -52,8 +52,11 @@ class NBTItem:
 
 def enter_tree(tree: lark.Tree) -> Tuple[str, list]:
     """Return the name token and children of a tree."""
-    name, subtree = tree.children
-    return name, subtree.children
+    name, *subtrees = tree.children
+    if len(subtrees) == 1:
+        return name, subtrees[0].children
+    else:
+        return name, subtrees
 
 
 def get_nbt_items(root: Path) -> Dict[str, str]:
@@ -63,7 +66,7 @@ def get_nbt_items(root: Path) -> Dict[str, str]:
 
     for path in paths:
         # Skip the file if it doesn't contain a valid NBT item
-        with suppress(MissingNBTFieldException):
+        with suppress(MissingNBTFieldError):
             with path.open() as file:
                 data = json.load(file)
             if type(data) is dict:

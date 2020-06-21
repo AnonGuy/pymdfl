@@ -10,7 +10,7 @@ from cookiecutter.main import cookiecutter
 
 from lark import Lark, lark
 
-from mdfl.parser.exceptions import InvalidNBTReferenceException
+from mdfl.parser.exceptions import InvalidNBTReferenceError
 from mdfl.parser.utils import enter_tree, get_nbt_items
 
 
@@ -79,7 +79,13 @@ def create_pack(tree: lark.Tree, pack_name: str, source: Path, target: Optional[
         namespaces.append(namespace)
 
         for definition in definitions:
-            if definition.data == 'function':
+            first_child = definition.children[0]
+
+            if getattr(first_child, "data", "") == "objective":
+                scoreboard = first_child.children[0]
+                # TODO: Implement scoreboard generators
+
+            if definition.data == "function":
                 commands: List[str] = []
                 name, instructions = enter_tree(definition)
                 for instruction in instructions:
@@ -89,7 +95,7 @@ def create_pack(tree: lark.Tree, pack_name: str, source: Path, target: Optional[
                         reference = match.group(1)
                         item = nbt_items.get(reference)
                         if item is None:
-                            raise InvalidNBTReferenceException(
+                            raise InvalidNBTReferenceError(
                                 f"{reference} is not an existing NBT item."
                             )
                         command = NBT_REFERENCE.sub(item, command)
