@@ -63,9 +63,9 @@ This will generate a zip file `gems.zip` with the following structure:
 See the [examples](https://github.com/AnonGuy/pymdfl/tree/master/examples/gems) directory for more complex examples.
 
 # Roadmap
-- [ ] Namespaces
-- [ ] Functions
-- [ ] NBT item references
+- [x] Namespaces
+- [x] Functions
+- [x] NBT item references
 - [ ] Objective definitions
 - [ ] If statements
 - [ ] Scoreboard event tags
