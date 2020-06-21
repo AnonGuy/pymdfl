@@ -60,3 +60,4 @@ This will generate a zip file `gems.zip` with the following structure:
 │        └── get.mcfunction
 └── pack.mcmeta
 ```
+See the [examples](https://github.com/AnonGuy/pymdfl/tree/master/examples/gems) directory for more complex examples.
